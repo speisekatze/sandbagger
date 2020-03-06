@@ -1,12 +1,17 @@
 **Aggregates Blocklists from different sources into categories**
 
-This app spawns a simple HTTP(S) server on a given port. It serves DNSBL-files in multiple categories to feed pfBlockerNG. The server removes duplicate hosts from different sources for each category. The categories and sources are fully customizable.
+This app spawns a simple HTTP(S) server on a given port. 
+It serves DNSBL-files in multiple categories to feed pfBlockerNG. 
+The server removes duplicate hosts from different sources for each category. 
+The categories and sources are fully customizable.
 
 ---
 
 ## Sources used
 
-I'm using various sources for this project. At first, I used blocklists of Stephen Black's ["hosts" project](https://github.com/StevenBlack/hosts/) as initial lists. But decided to take his sources and scrape his update-files for more granular blocklists and his *extensions* as category names.
+I'm using various sources for this project. 
+At first, I used blocklists of Stephen Black's ["hosts" project](https://github.com/StevenBlack/hosts/) as initial lists. 
+But decided to take his sources and scrape his update-files for more granular blocklists and his *extensions* as category names.
 Here is a list of all sources currently used in the sandbagger configuration. Feel free to add your sources of blocklists.
 
 Name: Tiuxo hostlist - social
