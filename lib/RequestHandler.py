@@ -4,12 +4,9 @@ Created on Sun Mar 29 22:25:32 2015
 
 @author: n4p
 """
-#from lib.Config import Config
 from lib import aggregator
-import hmac
 import urllib.parse
 import urllib.request as ur
-import base64
 
 
 GET = 0x01
