@@ -1,0 +1,31 @@
+image: python-3.7.3 # Choose an image matching your project needs
+
+clone:
+      depth: full              # SonarCloud scanner needs the full history to assign issues properly
+
+definitions:
+      caches:
+            sonar: ~/.sonar/cache  # Caching SonarCloud artifacts will speed up your build
+      steps:
+      - step: &build-test-sonarcloud
+              name: Build, test and analyze on SonarCloud
+              caches:
+              - pip
+              - sonar
+              script:
+              - python main.py           # Build your project and run
+              - pipe: sonarsource/sonarcloud-scan:1.0.1
+      - step: &check-quality-gate-sonarcloud
+              name: Check the Quality Gate on SonarCloud
+              script:
+              - pipe: sonarsource/sonarcloud-quality-gate:0.1.3
+
+pipelines:         
+  branches:
+    master:
+      - step: *build-test-sonarcloud
+      - step: *check-quality-gate-sonarcloud
+  pull-requests:
+    '**':
+      - step: *build-test-sonarcloud
+      - step: *check-quality-gate-sonarcloud
