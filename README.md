@@ -42,7 +42,7 @@ Name: add.2o7Net -
 Home: https://github.com/FadeMind/hosts.extras   
 Name: yoyo.org - 
 Home: https://pgl.yoyo.org/adservers/   
-Name: UncheckyAds -   
+Name: UncheckyAds - 
 Home: https://github.com/FadeMind/hosts.extras   
 Name: Steven Black's ad-hoc list - 
 Home: https://github.com/StevenBlack/hosts/blob/master/data/StevenBlack/hosts   
