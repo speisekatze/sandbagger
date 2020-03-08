@@ -7,7 +7,7 @@ Created on Sat Mar 28 23:37:56 2015
 
 import time
 from lib.httpServer import http_request
-from lib.httpServer import httpServer
+from lib.httpServer import http_server
 #from lib import request_handler
 from lib import config
 
@@ -16,7 +16,7 @@ from lib import config
 
 Handler = http_request.HttpRequest
 #Handler.externHandler = request_handler.RequestHandler(CONF)
-HTTPD = httpServer.httpServer(Handler, int(config.Config().value('Server/port')))
+HTTPD = http_server.HttpServer(Handler, int(config.Config().value('Server/port')))
 
 HTTPD.start()
 try:

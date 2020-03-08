@@ -18,11 +18,23 @@ REQINV = 0x1
 SRCINV = 0x2
 UNKNOWN = 0x4
 
+def get_help_text():
+    """ compile some kind of error page """
+    help_html = "<html><head><title>Error</title></head><body>"
+    help_html += "<h1>Avaiable Blocklist Groups</h1>"
+    help_html += "<p>Just append the name of the blocklist to the path like"
+    help_html += " http(s)://blocklist.somewhere.org/social</p><ul>"
+    groups = config.Config().valuelist('Blacklists/Groups/Group')
+    for group in groups:
+        help_html += "<li>" + group.get('name') + "</li>"
+    help_html += "</ul></body>"
+    return help_html
+
 class HttpRequest(http.server.BaseHTTPRequestHandler):
     """ simple class to handle our HTTP requests """
     server_version = "httpd/sandbagger " + __version__
     response = []
-    LogFile = None
+    logfile = None
     result = []
 
     def do_GET(self):
@@ -33,22 +45,11 @@ class HttpRequest(http.server.BaseHTTPRequestHandler):
         """Serve a HEAD request."""
         self.send_head()
 
-    def get_help_text(self):
-        """ compile some kind of error page """
-        help_html = "<html><head><title>Error</title></head><body>"
-        help_html += "<h1>Avaiable Blocklist Groups</h1>"
-        help_html += "<p>Just append the name of the blocklist to the path like"
-        help_html += " http(s)://blocklist.somewhere.org/social</p><ul>"
-        groups = config.Config().valuelist('Blacklists/Groups/Group')
-        for group in groups:
-            help_html += "<li>" + group.get('name') + "</li>"
-        help_html += "</ul></body>"
-        return help_html
-
     def send_head(self):
         """ currently handles all different requests """
         handler_result = None
-        handler_result = self.process_request(self.path)
+        path = urllib.parse.unquote(self.path)
+        handler_result = self.process_request(path)
         if handler_result == REQOK:
             self.send_response(200)
             self.send_header("Content-type", "text/text; charset=%s" % 'UTF-8')
@@ -66,14 +67,14 @@ class HttpRequest(http.server.BaseHTTPRequestHandler):
         else:
             if handler_result == REQINV:
                 self.send_response(404)
-                self.log_message('path not found - path: ' + self.path)
+                self.log_message('path not found - path: %s' % path)
             elif handler_result == SRCINV:
                 self.send_response(501)
-                self.log_message('something went wrong - path: ' + self.path)
+                self.log_message('something went wrong - path: %s' % path)
             else:
                 self.send_response(500)
-                self.log_message('something went wrong - path: ' + self.path)
-            help_string = self.get_help_text()
+                self.log_message('something went wrong - path: %s' % path)
+            help_string = get_help_text()
             self.send_header("Content-type", "text/html; charset=%s" % 'UTF-8')
             self.send_header("Content-Length", str(len(help_string)))
             self.end_headers()
@@ -100,7 +101,6 @@ class HttpRequest(http.server.BaseHTTPRequestHandler):
                             blocklist_data = aggregator.normalize(ur.urlopen(item.get('url')))
                             blocklist.append({'name': item.get('name'), 'data': blocklist_data})
                         self.result = aggregator.merge(blocklist)
-                        print(len(self.result))
                 return response
             except Exception as error:
                 self.log_message("Error '{0}' occured." % (error))
@@ -116,4 +116,4 @@ class HttpRequest(http.server.BaseHTTPRequestHandler):
         """ writes message to log """
         address = self.address_string()
         date_time = self.log_date_time_string()
-        self.LogFile.write("%s - - [%s] %s\n" % (address, date_time, format%args))
+        self.logfile.write("%s - - [%s] %s\n" % (address, date_time, format%args))
