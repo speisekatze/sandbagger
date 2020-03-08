@@ -1,4 +1,4 @@
-image: python-3.7.3 # Choose an image matching your project needs
+image: python:3.8.2 # Choose an image matching your project needs
 
 clone:
       depth: full              # SonarCloud scanner needs the full history to assign issues properly
