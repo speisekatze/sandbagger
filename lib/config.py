@@ -8,12 +8,14 @@ Created on Sun Mar 29 22:50:29 2015
 
 import xml.etree.ElementTree as ET
 
-class Config():
+
+class Config:
     """ wrapper for reading config xml with xpath """
+
     root = None
     tree = None
 
-    def __init__(self, filename = 'Config/sandbagger.conf'):
+    def __init__(self, filename="Config/sandbagger.conf"):
         self.tree = ET.parse(filename)
         self.root = self.tree.getroot()
 
