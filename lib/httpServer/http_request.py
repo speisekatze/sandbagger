@@ -63,7 +63,6 @@ class HttpRequest(http.server.BaseHTTPRequestHandler):
                 self.end_headers()
                 self.log_message('served %d urls' % len(self.result))
                 self.wfile.write(out.encode("utf8"))
-                return
         else:
             if handler_result == REQINV:
                 self.send_response(404)
