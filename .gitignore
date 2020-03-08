@@ -3,3 +3,5 @@ __pycache__/
 *$py.class
 *.log
 .scannerwork/
+.coverage
+coverage.xml
