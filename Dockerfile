@@ -1,4 +1,4 @@
-FROM python:3.8.2
+FROM python:slim
 ADD . /sandbagger
 WORKDIR /sandbagger
 EXPOSE 8080
