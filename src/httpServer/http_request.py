@@ -9,8 +9,8 @@ import http.server
 import datetime
 import urllib.parse
 import urllib.request as ur
-from lib import aggregator
-from lib import config
+from src import aggregator
+from src.config import Config
 
 __version__ = "0.2"
 
@@ -26,11 +26,21 @@ def get_help_text():
     help_html += "<h1>Avaiable Blocklist Groups</h1>"
     help_html += "<p>Just append the name of the blocklist to the path like"
     help_html += " http(s)://blocklist.somewhere.org/social</p><ul>"
-    groups = config.Config().valuelist("Blacklists/Groups/Group")
+    blacklists = Config(filename="ext/blacklists.conf")
+    groups = blacklists.valuelist("Groups/Group")
     for group in groups:
         help_html += "<li>" + group.get("name") + "</li>"
     help_html += "</ul></body>"
     return help_html
+
+
+def get_argument(msg, argn=1):
+    if len(msg) > argn:
+        arg = msg[argn].split('=')
+        if arg[0] == 'fmt':
+            if arg[1] == '1':
+                return 1
+    return 0
 
 
 class HttpRequest(http.server.BaseHTTPRequestHandler):
@@ -90,22 +100,24 @@ class HttpRequest(http.server.BaseHTTPRequestHandler):
             for category name given by request and call aggregator """
         try:
             get_request = urllib.parse.urlparse(path)
-            msg = get_request.path
-            conf = config.Config()
+            msg = get_request.path[1:].split('/')
+            blacklists = Config(filename="ext/blacklists.conf")
             try:
                 response = REQINV
-                groups = conf.valuelist("Blacklists/Groups/Group")
+                groups = blacklists.valuelist("Groups/Group")
                 for group in groups:
                     group_name = group.get("name")
-                    if msg[1:] == group_name:
+                    if msg[0] == group_name:
                         response = REQOK
-                        lists = conf.valuelist(
-                            'Blacklists/Groups/Group[@name="' + group_name + '"]/list'
+                        lists = blacklists.valuelist(
+                            'Groups/Group[@name="' + group_name + '"]/list'
                         )
                         blocklist = []
                         for item in lists:
+                            format = get_argument(msg, 1)
                             blocklist_data = aggregator.normalize(
-                                ur.urlopen(item.get("url"))
+                                ur.urlopen(item.get("url")),
+                                format
                             )
                             blocklist.append(
                                 {"name": item.get("name"), "data": blocklist_data}

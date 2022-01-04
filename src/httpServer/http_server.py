@@ -9,6 +9,7 @@ __version__ = "0.2"
 import socketserver
 import ssl
 import _thread
+import os.path
 
 
 class HttpServer:
@@ -20,7 +21,7 @@ class HttpServer:
     cert_filename = ""
     logfile = None
 
-    def __init__(self, handler=None, port=None):
+    def __init__(self, handler=None, port=8080):
         self.handler = handler
         self.port = port
         self.logfile = open("httpd.log", "a+")
@@ -47,7 +48,7 @@ class HttpServer:
         self.httpd.timeout = 2000
         self.httpd.server_bind()
         self.httpd.server_activate()
-        if self.cert_filename != "":
+        if self.cert_filename != "" and os.path.isfile(self.cert_filename):
             self.httpd.socket = ssl.wrap_socket(
                 self.httpd.socket, certfile=self.cert_filename, server_side=True
             )

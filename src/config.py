@@ -15,7 +15,7 @@ class Config:
     root = None
     tree = None
 
-    def __init__(self, filename="Config/sandbagger.conf"):
+    def __init__(self, filename="config/sandbagger.conf"):
         self.tree = ET.parse(filename)
         self.root = self.tree.getroot()
 

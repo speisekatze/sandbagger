@@ -6,13 +6,16 @@ Created on Sat Mar 28 23:37:56 2015
 """
 
 import time
-from lib.httpServer import http_request
-from lib.httpServer import http_server
-from lib import config
+from src.httpServer import http_request
+from src.httpServer import http_server
+from src.config import Config
+
+conf = Config(filename="config/sandbagger.conf")
+
 
 Handler = http_request.HttpRequest
-HTTPD = http_server.HttpServer(Handler, int(config.Config().value("Server/port")))
-
+HTTPD = http_server.HttpServer(Handler, int(conf.value("Server/port")))
+HTTPD.set_cert(conf.value("Server/cert"))
 HTTPD.start()
 try:
     while True:

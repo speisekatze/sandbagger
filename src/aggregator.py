@@ -7,14 +7,17 @@ Created on Fr Mar 06 18:30:29 2020
 """
 
 
-def normalize(data):
+def normalize(data, fmt):
     """ remove lines starting with # and replace whatever ip is in one line with 0.0.0.0 """
     normalized = []
     for item in data:
         line = item.decode("utf-8").split()
         if len(line) < 1 or line[0][0] == "#":
             continue
-        normalized.append("0.0.0.0 " + line[1])
+        s = "0.0.0.0 "
+        if fmt == 1:
+            s = ""
+        normalized.append(s + line[1])
     return normalized
 
 
@@ -23,11 +26,9 @@ def merge(blacklists, dupes=False):
     newlist = []
     if len(blacklists) > 1:
         popped = blacklists.pop()
-        print(popped["name"])
         list_a = popped["data"]
     else:
         popped = blacklists.pop()
-        print(popped["name"])
         return popped["data"]
 
     list_b = merge(blacklists, dupes)
