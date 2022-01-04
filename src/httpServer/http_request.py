@@ -115,20 +115,22 @@ class HttpRequest(http.server.BaseHTTPRequestHandler):
                         blocklist = []
                         for item in lists:
                             format = get_argument(msg, 1)
-                            blocklist_data = aggregator.normalize(
-                                ur.urlopen(item.get("url")),
-                                format
-                            )
-                            blocklist.append(
-                                {"name": item.get("name"), "data": blocklist_data}
-                            )
+                            try:
+                                data = ur.urlopen(item.get("url"))
+                            except Exception:
+                                data = ""
+                            else:
+                                blocklist_data = aggregator.normalize(data, format)
+                                blocklist.append(
+                                    {"name": item.get("name"), "data": blocklist_data}
+                                )
                         self.result = aggregator.merge(blocklist)
                 return response
             except Exception as error:
-                self.log_message("Error '{0}' occured." % (error))
+                self.log_message("Error '{0}' occured.", (error))
                 return SRCINV
         except Exception as error:
-            self.log_message("Error '{0}' occured." % (error))
+            self.log_message("Error '{0}' occured.", (error))
             return REQINV
         else:
             self.log_message("should not get here")
