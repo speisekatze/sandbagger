@@ -15,7 +15,7 @@ conf = Config(filename="config/sandbagger.conf")
 
 Handler = http_request.HttpRequest
 HTTPD = http_server.HttpServer(Handler, int(conf.value("Server/port")))
-HTTPD.set_cert(conf.value("Server/cert"))
+HTTPD.set_cert(conf.value("Server/cert"), conf.value("Server/key"))
 HTTPD.start()
 try:
     while True:

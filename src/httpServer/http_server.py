@@ -31,9 +31,10 @@ class HttpServer:
         """ unused provide a handlerclass for socketserver """
         self.handler = handler
 
-    def set_cert(self, filename):
+    def set_cert(self, cert, key):
         """ providing a ssl certificate activates ssl-mode """
-        self.cert_filename = filename
+        self.cert_filename = cert
+        self.key_filename = key
 
     def set_port(self, port):
         """ port server is listening to """
@@ -48,9 +49,12 @@ class HttpServer:
         self.httpd.timeout = 2000
         self.httpd.server_bind()
         self.httpd.server_activate()
-        if self.cert_filename != "" and os.path.isfile(self.cert_filename):
+
+        if self.cert_filename != "" and os.path.isfile(self.cert_filename) and \
+           self.key_filename != "" and os.path.isfile(self.key_filename):
             self.httpd.socket = ssl.wrap_socket(
-                self.httpd.socket, certfile=self.cert_filename, server_side=True
+                self.httpd.socket, certfile=self.cert_filename, server_side=True,
+                keyfile=self.key_filename
             )
         print("start serving")
         _thread.start_new_thread(self.httpd.serve_forever, ())
