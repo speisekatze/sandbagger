@@ -2,11 +2,37 @@
 **sandbagger - Aggregates Blocklists from different sources into categories**
 
 This app spawns a simple HTTP(S) server on a given port.   
-It serves DNSBL-files in multiple categories to feed pfBlockerNG.   
+It serves DNSBL-files in multiple categories to feed pfBlockerNG or piHole.   
 The server removes duplicate hosts from different sources for each category.   
 The categories and sources are fully customizable.  
 
 ---
+
+## Install
+
+You can either pull the image from [dockerhub](https://hub.docker.com/r/speisekatze/sandbagger), creating the image with the Dockerfile 
+or deploy it with docker-compose.
+
+### Using the image 
+
+The configuration is the same for the own created image or the one from dockerhub.
+Start the container with the default configuration:
+```bash
+docker run -d --name sandbagger -p 8080:8080 sandbagger
+```
+
+The default config uses a self signed certificate, you can change this by passing some empty environment variables.
+```bash
+docker run -d --name sandbagger -p 8080:8080 -e CERT= -e KEY= sandbagger
+```
+
+If you want to use an own collection of blocklist you have to create a directory which maps into the container. In this directory
+create a new file named `blacklists.conf`, see file in ./config for an example.
+```bash
+docker run -d --name sandbagger -p 8080:8080 -e CERT -e KEY -v /data/volumes/sandbagger:/sandbagger/ext sandbagger
+```
+
+You can also provide an own certificate and keyfile in that directory and set the environment variables to the filenames 
 
 ## Sources used
 
