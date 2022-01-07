@@ -6,3 +6,6 @@ __pycache__/
 .coverage
 coverage.xml
 tools/
+.vscode/
+.vscode/settings.json
+env/
