@@ -13,7 +13,7 @@ from src import aggregator
 from src.config import Config
 
 
-__version__ = "0.2"
+__version__ = "0.3"
 
 REQOK = 0x0
 REQINV = 0x1
