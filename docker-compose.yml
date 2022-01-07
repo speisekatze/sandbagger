@@ -1,0 +1,16 @@
+version: "2.4"
+services:
+  sandbagger:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: sandbagger
+    container_name: sandbagger
+    environment:
+      - PORT=8090
+      - CERT=
+      - KEY=
+    volumes:
+      - /data/volumes/sandbagger:/sandbagger/ext
+    ports:
+      - 8090:8090
