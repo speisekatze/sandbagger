@@ -33,8 +33,18 @@ class HttpServer:
 
     def set_cert(self, cert, key):
         """ providing a ssl certificate activates ssl-mode """
-        self.cert_filename = cert
-        self.key_filename = key
+        self.cert_filename = self.get_cert_filepath(cert)
+        self.key_filename = self.get_cert_filepath(key)
+
+    def get_cert_filepath(self, filename):
+        """ check if file is in ext or config """
+        f = 'ext/' + filename
+        if not os.path.isfile(f):
+            f = 'config/' + filename
+        if not os.path.isfile(f):
+            f = ''
+        print(f)
+        return f
 
     def set_port(self, port):
         """ port server is listening to """

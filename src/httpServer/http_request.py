@@ -12,6 +12,7 @@ import urllib.request as ur
 from src import aggregator
 from src.config import Config
 
+
 __version__ = "0.2"
 
 REQOK = 0x0
@@ -26,7 +27,7 @@ def get_help_text():
     help_html += "<h1>Avaiable Blocklist Groups</h1>"
     help_html += "<p>Just append the name of the blocklist to the path like"
     help_html += " http(s)://blocklist.somewhere.org/social</p><ul>"
-    blacklists = Config(filename="ext/blacklists.conf")
+    blacklists = Config(filename="blacklists.conf")
     groups = blacklists.valuelist("Groups/Group")
     for group in groups:
         help_html += "<li>" + group.get("name") + "</li>"
@@ -101,7 +102,7 @@ class HttpRequest(http.server.BaseHTTPRequestHandler):
         try:
             get_request = urllib.parse.urlparse(path)
             msg = get_request.path[1:].split('/')
-            blacklists = Config(filename="ext/blacklists.conf")
+            blacklists = Config(filename="blacklists.conf")
             try:
                 response = REQINV
                 groups = blacklists.valuelist("Groups/Group")

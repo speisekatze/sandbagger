@@ -10,7 +10,8 @@ from src.httpServer import http_request
 from src.httpServer import http_server
 from src.config import Config
 
-conf = Config(filename="config/sandbagger.conf")
+
+conf = Config(filename="sandbagger.conf")
 
 
 Handler = http_request.HttpRequest
@@ -20,6 +21,6 @@ HTTPD.start()
 try:
     while True:
         time.sleep(1)
-except KeyboardInterrupt as error:
+except KeyboardInterrupt:
     print("Server shutting down")
 HTTPD.stop()
